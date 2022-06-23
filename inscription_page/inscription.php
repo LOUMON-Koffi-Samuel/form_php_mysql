@@ -13,7 +13,7 @@
             <h1 class="text-primary">Inscription</h1>
         </div>
         <div class="card-body">
-        <form>
+        <form action="#" method="POST">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="email" name="email_inscription" aria-describedby="emailHelp">
@@ -26,6 +26,38 @@
         </form>
         </div>
     </div>
+
+    <?php
+     $servername = "localhost";
+     $username = "root";
+     $password = "root";
+     $base = "projet";
+
+     try {
+         $conn = new PDO("mysql:host=$servername;dbname=$base",$username, $password);
+         // set the PDO error mode to exception
+         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+         echo "Connected successfully";
+       } catch(PDOException $e) {
+         echo "Connection failed: " . $e->getMessage();
+     }
+
+    if(isset($_POST['email_inscription']) && isset($_POST['password_inscription'])){
+        $email = $_POST['email_inscription'];
+        $password = $_POST['password_inscription'];
+        $sql = "INSERT INTO users (email, password)
+        VALUES ($email, $password)";
+        
+        try{
+            $conn->exec($sql);
+        echo "New record created successfully";
+        } catch(PDOException $e) {
+        echo $sql . "<br>" . $e->getMessage();
+    }
+
+    $conn = null;
+}
+    ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
